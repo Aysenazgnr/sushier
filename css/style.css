@@ -97,13 +97,14 @@ ul{list-style:none;}
 
 /* ---------- Hero ---------- */
 .hero{
-  position:relative;height:100vh;min-height:620px;
+  position:relative;height:100vh;height:100dvh;min-height:620px;
   display:flex;align-items:center;justify-content:center;
   text-align:center;overflow:hidden;
 }
 .hero-bg{
-  position:absolute;inset:0;
-  background-size:cover;background-position:center;
+  position:absolute;inset:0;width:100%;height:100%;
+  background-color:var(--bg);
+  background-size:cover;background-position:center;background-repeat:no-repeat;
   transform:scale(1.08);
 }
 .hero-overlay{
