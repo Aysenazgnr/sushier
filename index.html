@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sushier — Fine Japanese Dining</title>
+<meta name="description" content="Sushier — an art form, served. Premium sushi and Japanese craft dining.">
+
+<!-- Favicons -->
+<link rel="icon" type="image/x-icon" href="favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="favicon/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="192x192" href="favicon/android-chrome-192x192.png">
+<link rel="icon" type="image/png" sizes="512x512" href="favicon/android-chrome-512x512.png">
+<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+<meta name="theme-color" content="#0c0c0c">
+
+<!-- Open Graph / Social -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="Sushier — Fine Japanese Dining">
+<meta property="og:description" content="An art form, served. Premium sushi and Japanese craft dining.">
+<meta property="og:image" content="images/og-image.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Sushier — Fine Japanese Dining">
+<meta name="twitter:description" content="An art form, served. Premium sushi and Japanese craft dining.">
+<meta name="twitter:image" content="images/og-image.jpg">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;1,9..144,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- Header -->
+<header class="site-header" id="siteHeader">
+  <a href="#reservation" class="reserve-btn">Reservation</a>
+  <a href="#top" class="logo">SUSHIER</a>
+  <nav class="main-nav">
+    <a href="#story">Story</a>
+    <a href="#dishes">Dishes</a>
+    <a href="#menu">Menu</a>
+    <a href="#contact">Contact</a>
+  </nav>
+  <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">
+    <span></span><span></span>
+  </button>
+</header>
+
+<!-- Mobile nav -->
+<div class="mobile-nav" id="mobileNav">
+  <a href="#reservation">Reservation</a>
+  <a href="#story">Story</a>
+  <a href="#dishes">Dishes</a>
+  <a href="#menu">Menu</a>
+  <a href="#contact">Contact</a>
+</div>
+
+<!-- Hero -->
+<section class="hero" id="top">
+  <div class="hero-bg" style="background-image:url('images/interior-night.webp')"></div>
+  <div class="hero-overlay"></div>
+  <div class="hero-content reveal">
+    <p class="eyebrow">Fine Japanese Dining</p>
+    <h1>An Art Form,<br>Served.</h1>
+    <p class="hero-sub">Where precision, fire and the sea meet on a single plate.</p>
+    <a href="#menu" class="ghost-btn">View Menu</a>
+  </div>
+  <div class="scroll-cue"><span></span></div>
+</section>
+
+<!-- Philosophy / Story -->
+<section class="story" id="story">
+  <div class="story-image reveal">
+    <img src="images/roll-making.webp" alt="Chef hand-rolling a salmon roll at Sushier">
+  </div>
+  <div class="story-text reveal">
+    <p class="eyebrow">Our Philosophy</p>
+    <h2>Every Roll,<br>A Ritual.</h2>
+    <p>At Sushier, nothing is rushed. Each piece is shaped by hand, each sauce built in layers,
+       each plate considered before it reaches the table. We work with what the sea offers that
+       day — nothing more, nothing less — and let technique do the rest.</p>
+    <p class="story-quote">"Simplicity is the final form of sophistication."</p>
+  </div>
+</section>
+
+<!-- Signature Dishes -->
+<section class="dishes" id="dishes">
+  <p class="eyebrow center">Signature Dishes</p>
+  <h2 class="section-title center">Crafted to Order</h2>
+
+  <div class="dishes-grid">
+    <article class="dish-card featured reveal">
+      <div class="dish-img"><img src="images/dish-tempura.webp" alt="Crispy tempura roll drizzled with eel sauce"></div>
+      <h3>Dragon Tempura Roll</h3>
+      <p>Crispy shrimp tempura, avocado, eel sauce, toasted sesame.</p>
+      <span class="price">$24</span>
+    </article>
+
+    <article class="dish-card reveal">
+      <div class="dish-img"><img src="images/hero-chef.webp" alt="Chef plating fresh sushi rolls"></div>
+      <h3>Chef's Omakase</h3>
+      <p>A seven-course tasting chosen daily by our head chef.</p>
+      <span class="price">$95</span>
+    </article>
+
+    <article class="dish-card reveal">
+      <div class="dish-img"><img src="images/table-spread.webp" alt="Full table spread of assorted sushi and small plates"></div>
+      <h3>Sushier Grand Platter</h3>
+      <p>An assortment of nigiri, sashimi and signature rolls for the table.</p>
+      <span class="price">$145</span>
+    </article>
+  </div>
+</section>
+
+<!-- Menu -->
+<section class="menu" id="menu">
+  <p class="eyebrow center">The Menu</p>
+  <h2 class="section-title center">A Taste of Sushier</h2>
+
+  <div class="menu-columns">
+    <div class="menu-col reveal">
+      <h3>Starters</h3>
+      <ul class="menu-list">
+        <li><span>Edamame, Yuzu Salt</span><em></em><b>$9</b></li>
+        <li><span>Miso Soup</span><em></em><b>$7</b></li>
+        <li><span>Tuna Tartare, Wasabi Aioli</span><em></em><b>$18</b></li>
+        <li><span>Crispy Rice, Spicy Salmon</span><em></em><b>$16</b></li>
+      </ul>
+
+      <h3>Nigiri &amp; Sashimi</h3>
+      <ul class="menu-list">
+        <li><span>Otoro, Torched</span><em></em><b>$22</b></li>
+        <li><span>Hokkaido Scallop</span><em></em><b>$14</b></li>
+        <li><span>Wild Salmon Sashimi (5pc)</span><em></em><b>$19</b></li>
+        <li><span>Uni, Quail Egg</span><em></em><b>$26</b></li>
+      </ul>
+    </div>
+
+    <div class="menu-col reveal">
+      <h3>Signature Rolls</h3>
+      <ul class="menu-list">
+        <li><span>Dragon Tempura Roll</span><em></em><b>$24</b></li>
+        <li><span>Black Pepper Wagyu Roll</span><em></em><b>$28</b></li>
+        <li><span>Spicy Tuna, Crispy Garlic</span><em></em><b>$21</b></li>
+        <li><span>Rainbow Roll</span><em></em><b>$23</b></li>
+      </ul>
+
+      <h3>Desserts</h3>
+      <ul class="menu-list">
+        <li><span>Matcha Tiramisu</span><em></em><b>$12</b></li>
+        <li><span>Black Sesame Ice Cream</span><em></em><b>$9</b></li>
+        <li><span>Yuzu Cheesecake</span><em></em><b>$13</b></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- Ambiance Gallery -->
+<section class="ambiance">
+  <p class="eyebrow center">The Space</p>
+  <h2 class="section-title center">An Atmosphere of Its Own</h2>
+
+  <div class="gallery">
+    <div class="gallery-item large reveal">
+      <img src="images/interior-night.webp" alt="Sushier dining room at night, warm lighting">
+    </div>
+    <div class="gallery-item reveal">
+      <img src="images/hero-chef.webp" alt="Chef preparing sushi at the counter">
+    </div>
+    <div class="gallery-item reveal">
+      <img src="images/table-spread.webp" alt="Table filled with sushi, sashimi and small plates">
+    </div>
+  </div>
+</section>
+
+<!-- Reservation CTA -->
+<section class="reservation" id="reservation">
+  <p class="eyebrow center">Join Us</p>
+  <h2 class="section-title center">Reserve Your Table</h2>
+  <p class="reservation-sub">For parties of 6 or more, please contact us directly.</p>
+  <a href="#contact" class="ghost-btn light">Reserve Now</a>
+</section>
+
+<!-- Footer / Contact -->
+<footer class="site-footer" id="contact">
+  <div class="footer-col">
+    <h4>SUSHIER</h4>
+    <p>123 Harbor Lane<br>Istanbul, Turkey</p>
+  </div>
+  <div class="footer-col">
+    <h4>Hours</h4>
+    <p>Tue – Sun, 18:00 – 00:00<br>Closed Mondays</p>
+  </div>
+  <div class="footer-col">
+    <h4>Contact</h4>
+    <p><a href="tel:+900000000000">+90 000 000 00 00</a><br>
+       <a href="mailto:reservations@sushier.com">reservations@sushier.com</a></p>
+  </div>
+  <div class="footer-col">
+    <h4>Follow</h4>
+    <p><a href="#">Instagram</a> · <a href="#">Facebook</a></p>
+  </div>
+  <div class="footer-bottom">© 2026 Sushier. All rights reserved.</div>
+</footer>
+
+<div class="footer-map">
+  <iframe
+    src="https://www.google.com/maps?q=Istanbul%2C+Turkey&output=embed"
+    width="100%" height="100%" style="border:0;" allowfullscreen=""
+    loading="lazy" referrerpolicy="no-referrer-when-downgrade"
+    title="Sushier location map">
+  </iframe>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>
