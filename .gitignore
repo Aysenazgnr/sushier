@@ -1,2 +1,7 @@
 .DS_Store
 Thumbs.db
+
+# Secrets / environment files
+.env
+.env.*
+*.local

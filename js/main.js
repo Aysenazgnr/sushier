@@ -7,13 +7,31 @@ window.addEventListener('scroll', () => {
 // Mobile nav toggle
 const navToggle = document.getElementById('navToggle');
 const mobileNav = document.getElementById('mobileNav');
+function setMobileNavOpen(open) {
+  mobileNav.classList.toggle('open', open);
+  navToggle.setAttribute('aria-expanded', String(open));
+  mobileNav.setAttribute('aria-hidden', String(!open));
+}
 navToggle.addEventListener('click', () => {
-  mobileNav.classList.toggle('open');
+  setMobileNavOpen(!mobileNav.classList.contains('open'));
 });
 mobileNav.querySelectorAll('a').forEach(a => {
-  a.addEventListener('click', () => mobileNav.classList.remove('open'));
+  a.addEventListener('click', () => setMobileNavOpen(false));
 });
 
+// If GSAP failed to load (CDN blocked/offline) or the user prefers reduced
+// motion, skip all animation and make sure content is visible.
+const reducedMotion = document.documentElement.classList.contains('reduced-motion');
+if (typeof gsap === 'undefined' || reducedMotion) {
+  document.querySelectorAll('.reveal').forEach(el => {
+    el.style.opacity = '1';
+    el.style.transform = 'none';
+  });
+} else {
+  initAnimations();
+}
+
+function initAnimations() {
 // GSAP scroll reveal
 gsap.registerPlugin(ScrollTrigger);
 
@@ -49,3 +67,4 @@ gsap.to('.hero-bg', {
     scrub: true
   }
 });
+}

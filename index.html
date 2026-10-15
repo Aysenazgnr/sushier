@@ -5,6 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Sushier — Fine Japanese Dining</title>
 <meta name="description" content="Sushier — an art form, served. Premium sushi and Japanese craft dining.">
+<script>document.documentElement.classList.add('js');if(window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches){document.documentElement.classList.add('reduced-motion');}</script>
+<link rel="preload" as="image" href="images/interior-night.webp" fetchpriority="high">
 
 <!-- Favicons -->
 <link rel="icon" type="image/x-icon" href="favicon.ico">
@@ -44,19 +46,21 @@
     <a href="#menu">Menu</a>
     <a href="#contact">Contact</a>
   </nav>
-  <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">
+  <button class="nav-toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="mobileNav">
     <span></span><span></span>
   </button>
 </header>
 
 <!-- Mobile nav -->
-<div class="mobile-nav" id="mobileNav">
+<div class="mobile-nav" id="mobileNav" aria-hidden="true">
   <a href="#reservation">Reservation</a>
   <a href="#story">Story</a>
   <a href="#dishes">Dishes</a>
   <a href="#menu">Menu</a>
   <a href="#contact">Contact</a>
 </div>
+
+<main>
 
 <!-- Hero -->
 <section class="hero" id="top">
@@ -74,7 +78,7 @@
 <!-- Philosophy / Story -->
 <section class="story" id="story">
   <div class="story-image reveal">
-    <img src="images/roll-making.webp" alt="Chef hand-rolling a salmon roll at Sushier">
+    <img src="images/roll-making.webp" alt="Chef hand-rolling a salmon roll at Sushier" width="800" height="1200" loading="lazy" decoding="async">
   </div>
   <div class="story-text reveal">
     <p class="eyebrow">Our Philosophy</p>
@@ -93,21 +97,21 @@
 
   <div class="dishes-grid">
     <article class="dish-card featured reveal">
-      <div class="dish-img"><img src="images/dish-tempura.webp" alt="Crispy tempura roll drizzled with eel sauce"></div>
+      <div class="dish-img"><img src="images/dish-tempura.webp" alt="Crispy tempura roll drizzled with eel sauce" width="800" height="1200" loading="lazy" decoding="async"></div>
       <h3>Dragon Tempura Roll</h3>
       <p>Crispy shrimp tempura, avocado, eel sauce, toasted sesame.</p>
       <span class="price">$24</span>
     </article>
 
     <article class="dish-card reveal">
-      <div class="dish-img"><img src="images/hero-chef.webp" alt="Chef plating fresh sushi rolls"></div>
+      <div class="dish-img"><img src="images/hero-chef.webp" alt="Chef plating fresh sushi rolls" width="1113" height="1668" loading="lazy" decoding="async"></div>
       <h3>Chef's Omakase</h3>
       <p>A seven-course tasting chosen daily by our head chef.</p>
       <span class="price">$95</span>
     </article>
 
     <article class="dish-card reveal">
-      <div class="dish-img"><img src="images/table-spread.webp" alt="Full table spread of assorted sushi and small plates"></div>
+      <div class="dish-img"><img src="images/table-spread.webp" alt="Full table spread of assorted sushi and small plates" width="675" height="1200" loading="lazy" decoding="async"></div>
       <h3>Sushier Grand Platter</h3>
       <p>An assortment of nigiri, sashimi and signature rolls for the table.</p>
       <span class="price">$145</span>
@@ -165,13 +169,13 @@
 
   <div class="gallery">
     <div class="gallery-item large reveal">
-      <img src="images/interior-night.webp" alt="Sushier dining room at night, warm lighting">
+      <img src="images/interior-night.webp" alt="Sushier dining room at night, warm lighting" width="1200" height="1800" loading="lazy" decoding="async">
     </div>
     <div class="gallery-item reveal">
-      <img src="images/hero-chef.webp" alt="Chef preparing sushi at the counter">
+      <img src="images/hero-chef.webp" alt="Chef preparing sushi at the counter" width="1113" height="1668" loading="lazy" decoding="async">
     </div>
     <div class="gallery-item reveal">
-      <img src="images/table-spread.webp" alt="Table filled with sushi, sashimi and small plates">
+      <img src="images/table-spread.webp" alt="Table filled with sushi, sashimi and small plates" width="675" height="1200" loading="lazy" decoding="async">
     </div>
   </div>
 </section>
@@ -183,6 +187,8 @@
   <p class="reservation-sub">For parties of 6 or more, please contact us directly.</p>
   <a href="#contact" class="ghost-btn light">Reserve Now</a>
 </section>
+
+</main>
 
 <!-- Footer / Contact -->
 <footer class="site-footer" id="contact">
@@ -215,8 +221,8 @@
   </iframe>
 </div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
-<script src="js/main.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" integrity="sha384-g4NTh/Iv5PPU4xPyhEWqPcwtNXOvdaDI8LLnyYfyNZOjKJeYQyjzQ9X5275eBjpt" crossorigin="anonymous" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" integrity="sha384-Z3REaz79l2IaAZqJsSABtTbhjgOUYyV3p90XNnAPCSHg3EMTz1fouunq9WZRtj3d" crossorigin="anonymous" defer></script>
+<script src="js/main.js" defer></script>
 </body>
 </html>
