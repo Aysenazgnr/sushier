@@ -1,3 +1,20 @@
+// Click-to-load Google Maps embed (avoids setting third-party
+// cookies / loading Maps JS until the visitor actually asks for it)
+const mapLoadBtn = document.getElementById('mapLoadBtn');
+if (mapLoadBtn) {
+  mapLoadBtn.addEventListener('click', () => {
+    const iframe = document.createElement('iframe');
+    iframe.src = 'https://www.google.com/maps?q=Istanbul%2C+Turkey&output=embed';
+    iframe.width = '100%';
+    iframe.height = '100%';
+    iframe.style.border = '0';
+    iframe.loading = 'lazy';
+    iframe.referrerPolicy = 'no-referrer-when-downgrade';
+    iframe.title = 'Sushier location map';
+    document.getElementById('footerMap').replaceChildren(iframe);
+  });
+}
+
 // Sticky header background on scroll
 const header = document.getElementById('siteHeader');
 window.addEventListener('scroll', () => {

@@ -31,7 +31,9 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;1,9..144,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;1,9..144,400&family=Jost:wght@300;400;500&display=swap">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;1,9..144,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+<noscript><link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;1,9..144,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet"></noscript>
 <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -97,14 +99,14 @@
 
   <div class="dishes-grid">
     <article class="dish-card featured reveal">
-      <div class="dish-img"><img src="images/dish-tempura.webp" alt="Crispy tempura roll drizzled with eel sauce" width="800" height="1200" loading="lazy" decoding="async"></div>
+      <div class="dish-img"><img src="images/dish-tempura.webp" alt="Crispy tempura roll drizzled with eel sauce" width="760" height="1140" loading="lazy" decoding="async"></div>
       <h3>Dragon Tempura Roll</h3>
       <p>Crispy shrimp tempura, avocado, eel sauce, toasted sesame.</p>
       <span class="price">$24</span>
     </article>
 
     <article class="dish-card reveal">
-      <div class="dish-img"><img src="images/hero-chef.webp" alt="Chef plating fresh sushi rolls" width="1113" height="1668" loading="lazy" decoding="async"></div>
+      <div class="dish-img"><img src="images/hero-chef.webp" alt="Chef plating fresh sushi rolls" width="1000" height="1499" loading="lazy" decoding="async"></div>
       <h3>Chef's Omakase</h3>
       <p>A seven-course tasting chosen daily by our head chef.</p>
       <span class="price">$95</span>
@@ -172,7 +174,7 @@
       <img src="images/interior-night.webp" alt="Sushier dining room at night, warm lighting" width="1200" height="1800" loading="lazy" decoding="async">
     </div>
     <div class="gallery-item reveal">
-      <img src="images/hero-chef.webp" alt="Chef preparing sushi at the counter" width="1113" height="1668" loading="lazy" decoding="async">
+      <img src="images/hero-chef.webp" alt="Chef preparing sushi at the counter" width="1000" height="1499" loading="lazy" decoding="async">
     </div>
     <div class="gallery-item reveal">
       <img src="images/table-spread.webp" alt="Table filled with sushi, sashimi and small plates" width="675" height="1200" loading="lazy" decoding="async">
@@ -193,32 +195,30 @@
 <!-- Footer / Contact -->
 <footer class="site-footer" id="contact">
   <div class="footer-col">
-    <h4>SUSHIER</h4>
+    <h3>SUSHIER</h3>
     <p>123 Harbor Lane<br>Istanbul, Turkey</p>
   </div>
   <div class="footer-col">
-    <h4>Hours</h4>
+    <h3>Hours</h3>
     <p>Tue – Sun, 18:00 – 00:00<br>Closed Mondays</p>
   </div>
   <div class="footer-col">
-    <h4>Contact</h4>
+    <h3>Contact</h3>
     <p><a href="tel:+900000000000">+90 000 000 00 00</a><br>
        <a href="mailto:reservations@sushier.com">reservations@sushier.com</a></p>
   </div>
   <div class="footer-col">
-    <h4>Follow</h4>
+    <h3>Follow</h3>
     <p><a href="#">Instagram</a> · <a href="#">Facebook</a></p>
   </div>
   <div class="footer-bottom">© 2026 Sushier. All rights reserved.</div>
 </footer>
 
-<div class="footer-map">
-  <iframe
-    src="https://www.google.com/maps?q=Istanbul%2C+Turkey&output=embed"
-    width="100%" height="100%" style="border:0;" allowfullscreen=""
-    loading="lazy" referrerpolicy="no-referrer-when-downgrade"
-    title="Sushier location map">
-  </iframe>
+<div class="footer-map" id="footerMap">
+  <button type="button" class="map-load-btn" id="mapLoadBtn">
+    Haritayı Göster
+    <span>Harita, üçüncü taraf çerezleri ayarlayan Google tarafından sağlanır.</span>
+  </button>
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" integrity="sha384-g4NTh/Iv5PPU4xPyhEWqPcwtNXOvdaDI8LLnyYfyNZOjKJeYQyjzQ9X5275eBjpt" crossorigin="anonymous" defer></script>

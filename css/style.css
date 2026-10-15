@@ -1,7 +1,7 @@
 :root{
   --bg:#0c0c0c;
   --bg-alt:#161511;
-  --accent:#c75c3f;
+  --accent:#c86a4a;
   --text:#f3efe9;
   --text-muted:#9a958d;
   --border:rgba(243,239,233,0.14);
@@ -233,7 +233,7 @@ ul{list-style:none;}
   display:grid;grid-template-columns:repeat(4,1fr);gap:2rem;
   border-top:1px solid var(--border);
 }
-.footer-col h4{
+.footer-col h3{
   font-family:var(--serif);font-size:1rem;letter-spacing:0.1em;
   margin-bottom:0.9rem;color:var(--accent);
 }
@@ -247,10 +247,22 @@ ul{list-style:none;}
 
 .footer-map{
   width:100%;height:380px;
-  filter:grayscale(1) invert(0.92) contrast(0.9);
   border-top:1px solid var(--border);
 }
-.footer-map iframe{display:block;}
+.footer-map iframe{display:block;filter:grayscale(1) invert(0.92) contrast(0.9);}
+.map-load-btn{
+  width:100%;height:100%;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0.6rem;
+  background:var(--bg-alt);border:none;cursor:pointer;
+  font-family:var(--sans);font-weight:300;
+  color:var(--text);font-size:0.95rem;letter-spacing:0.08em;text-transform:uppercase;
+  transition:background .3s;
+}
+.map-load-btn:hover{background:#1d1c17;}
+.map-load-btn span{
+  color:var(--text-muted);font-size:0.72rem;letter-spacing:0.02em;text-transform:none;
+  max-width:420px;text-align:center;
+}
 
 /* ---------- Reveal animation base ---------- */
 /* Only hidden when JS has run AND the user allows motion; otherwise content is visible by default (no-JS / CDN-blocked fallback). */
