@@ -1,0 +1,96 @@
+/* Admin-only layout. Loaded in addition to css/style.css, so tokens,
+   fonts and base typography come from there -- this file only adds what
+   a data screen needs that the marketing page never did: a table, a
+   login card, filter controls. No GSAP/Lenis/hero-scrub load here; a
+   reservations table has no scroll-scrub rig to support. */
+
+.admin-page{min-height:100vh;}
+
+.admin-header{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:1.2rem 2rem;border-bottom:1px solid var(--border);
+}
+.admin-logo{font-family:var(--serif);font-size:1.1rem;letter-spacing:0.08em;}
+.admin-logo-sub{color:var(--text-muted);font-family:var(--sans);font-size:0.78rem;letter-spacing:0.08em;text-transform:uppercase;margin-left:0.6rem;}
+
+.admin-header .ghost-btn{cursor:pointer;background:transparent;}
+
+.admin-main{padding:2.5rem 2rem;max-width:1280px;margin:0 auto;}
+
+.admin-login{max-width:380px;margin:4rem auto 0;}
+.admin-login h1{font-family:var(--serif);font-weight:400;font-size:1.8rem;margin-bottom:2rem;text-align:center;}
+.admin-login .field{margin-bottom:1.2rem;}
+.admin-login input{
+  width:100%;background:transparent;border:1px solid var(--border);
+  padding:0.85rem 1rem;font-family:var(--sans);font-weight:300;font-size:0.95rem;color:var(--text);
+  transition:border-color .3s;
+}
+.admin-login input:focus{border-color:var(--accent);}
+.admin-login .ghost-btn{width:100%;cursor:pointer;background:transparent;margin-top:0.6rem;}
+.admin-login .ghost-btn:disabled{opacity:0.5;cursor:not-allowed;}
+
+.field label{
+  display:block;font-family:var(--sans);font-size:0.78rem;letter-spacing:0.08em;
+  text-transform:uppercase;color:var(--text-muted);margin-bottom:0.5rem;
+}
+.field label .optional{text-transform:none;letter-spacing:0;}
+
+.admin-status{min-height:1.4rem;margin:0.8rem 0;font-size:0.9rem;color:var(--text-muted);}
+.admin-status.error{color:var(--danger);}
+
+.admin-panel{margin-bottom:3rem;}
+.admin-panel h2{font-family:var(--serif);font-weight:400;font-size:1.5rem;margin-bottom:1.2rem;}
+
+.admin-filters{display:flex;flex-wrap:wrap;gap:1.2rem;align-items:flex-end;margin-bottom:0.5rem;}
+.admin-filters .field{margin-bottom:0;min-width:160px;}
+.admin-filters input,.admin-filters select{
+  width:100%;background:transparent;border:1px solid var(--border);
+  padding:0.6rem 0.8rem;font-family:var(--sans);font-weight:300;font-size:0.9rem;color:var(--text);
+}
+.admin-quick-filters{display:flex;gap:0.5rem;flex-wrap:wrap;}
+.admin-quick-btn{
+  border:1px solid var(--border);background:transparent;color:var(--text-muted);
+  padding:0.55rem 0.9rem;font-family:var(--sans);font-size:0.78rem;letter-spacing:0.06em;
+  text-transform:uppercase;cursor:pointer;transition:border-color .3s,color .3s;
+}
+.admin-quick-btn:hover,.admin-quick-btn.active{border-color:var(--accent);color:var(--text);}
+
+.admin-summary{color:var(--text-muted);font-size:0.9rem;margin-bottom:1rem;}
+
+.admin-table-wrap{overflow-x:auto;border:1px solid var(--border);}
+.admin-table{width:100%;border-collapse:collapse;font-size:0.88rem;white-space:nowrap;}
+.admin-table th,.admin-table td{padding:0.7rem 0.9rem;text-align:left;border-bottom:1px solid var(--border);}
+.admin-table th{color:var(--text-muted);font-size:0.75rem;letter-spacing:0.06em;text-transform:uppercase;font-weight:400;}
+.admin-table td.notes-cell{white-space:normal;max-width:220px;}
+.admin-table tbody tr:last-child td{border-bottom:none;}
+.admin-table tbody tr.is-cancelled{opacity:0.5;}
+
+.admin-row-actions{display:flex;gap:0.4rem;flex-wrap:wrap;}
+.admin-action-btn{
+  border:1px solid var(--border);background:transparent;color:var(--text);
+  padding:0.4rem 0.7rem;font-family:var(--sans);font-size:0.72rem;letter-spacing:0.04em;
+  text-transform:uppercase;cursor:pointer;transition:border-color .3s;white-space:nowrap;
+}
+.admin-action-btn:hover{border-color:var(--accent);}
+.admin-action-btn.danger:hover{border-color:var(--danger);color:var(--danger);}
+
+.admin-close-form{display:flex;flex-wrap:wrap;gap:1.2rem;align-items:flex-end;margin-bottom:1rem;}
+.admin-close-form .field{margin-bottom:0;}
+.admin-close-form input{
+  background:transparent;border:1px solid var(--border);
+  padding:0.6rem 0.8rem;font-family:var(--sans);font-weight:300;font-size:0.9rem;color:var(--text);
+}
+.admin-close-form .ghost-btn{cursor:pointer;background:transparent;}
+
+.admin-closed-list{list-style:none;}
+.admin-closed-list li{
+  display:flex;align-items:center;justify-content:space-between;gap:1rem;
+  padding:0.6rem 0;border-bottom:1px solid var(--border);font-size:0.9rem;
+}
+.admin-closed-list li:last-child{border-bottom:none;}
+.admin-closed-list .closed-reason{color:var(--text-muted);margin-left:0.6rem;}
+
+@media (max-width:900px){
+  .admin-main{padding:1.8rem 1.2rem;}
+  .admin-table-wrap{font-size:0.8rem;}
+}

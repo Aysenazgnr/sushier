@@ -1,0 +1,12 @@
+{
+  "name": "sushier",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Sushier — fine Japanese dining. Static site + Vercel serverless reservation API.",
+  "engines": {
+    "node": "24.x"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.45.0"
+  }
+}

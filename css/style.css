@@ -5,11 +5,19 @@
   --text:#f3efe9;
   --text-muted:#9a958d;
   --border:rgba(243,239,233,0.14);
+  --danger:#e0584a;
   --serif:'Fraunces', serif;
   --sans:'Jost', sans-serif;
+  color-scheme:dark; /* keeps native <input type="date"> pickers legible on this dark page */
 }
 
 *{box-sizing:border-box;margin:0;padding:0;}
+/* Without this, any element that both carries the `hidden` attribute and a
+   class setting its own `display` (e.g. .ghost-btn{display:inline-block})
+   stays visible -- an author rule beats the browser's default [hidden]
+   style regardless of selector specificity. Found via #signOutBtn, which
+   combines hidden with .ghost-btn. */
+[hidden]{display:none !important;}
 html{scroll-behavior:smooth;}
 html.js{scroll-behavior:auto;} /* Lenis owns smooth scrolling when JS runs; avoids double-smoothing */
 body{
@@ -22,6 +30,11 @@ body{
 img{display:block;max-width:100%;}
 a{color:inherit;text-decoration:none;}
 ul{list-style:none;}
+
+/* No focus style existed anywhere on this site before the booking form --
+   keyboard users couldn't see where they were, on any control. One rule
+   fixes that everywhere, not just in the new form. */
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px;}
 
 .eyebrow{
   font-family:var(--sans);
@@ -255,6 +268,76 @@ html:not(.js) .hero-content{opacity:1;transform:none;}
 }
 .reservation-sub{color:var(--text-muted);margin-bottom:2.2rem;}
 
+.booking-form{
+  max-width:620px;margin:2.5rem auto 0;text-align:left; /* .reservation is centered; the form itself reads left-to-right */
+}
+.booking-grid{
+  display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;margin-bottom:1.2rem;
+}
+.field{display:flex;flex-direction:column;gap:0.5rem;margin-bottom:1.2rem;}
+.field label{
+  font-family:var(--sans);font-size:0.78rem;letter-spacing:0.08em;
+  text-transform:uppercase;color:var(--text-muted);
+}
+.field label .optional{text-transform:none;letter-spacing:0;}
+
+/* Native controls inherit nothing from body -- same reason .map-load-btn
+   re-declares font-family/weight/color below in the Footer block. */
+.booking-form input,.booking-form select,.booking-form textarea{
+  width:100%;
+  background:transparent;border:1px solid var(--border);
+  padding:0.85rem 1rem;
+  font-family:var(--sans);font-weight:300;font-size:0.95rem;color:var(--text);
+  transition:border-color .3s;
+}
+.booking-form textarea{resize:vertical;min-height:4.5rem;}
+.booking-form input::placeholder,.booking-form textarea::placeholder{color:var(--text-muted);}
+.booking-form input:focus,.booking-form select:focus,.booking-form textarea:focus{border-color:var(--accent);}
+.booking-form input:disabled,.booking-form select:disabled,.booking-form textarea:disabled{opacity:0.5;cursor:not-allowed;}
+.booking-form input[aria-invalid="true"],.booking-form textarea[aria-invalid="true"]{border-color:var(--danger);}
+
+.slots-field{border:none;}
+.slots-field legend{
+  font-family:var(--sans);font-size:0.78rem;letter-spacing:0.08em;
+  text-transform:uppercase;color:var(--text-muted);margin-bottom:0.6rem;padding:0;
+}
+/* Fixed min-height keeps the loading / pills / empty-message states from
+   changing section height, so footer/reveal positions barely move and a
+   ScrollTrigger.refresh() after render is a no-op reposition, not a jump. */
+.slots{display:flex;flex-wrap:wrap;gap:0.6rem;min-height:5.4rem;align-items:flex-start;margin-bottom:1.2rem;}
+.slots-message{color:var(--text-muted);font-size:0.9rem;padding:0.4rem 0;}
+
+/* A compact sibling of .ghost-btn -- never an <a>, see js/reservation.js:
+   Lenis intercepts every a[href^="#"], so these are always <button
+   type="button">, and are never given class="reveal" (that class's CSS
+   hides elements that only get a reveal animation if they existed at
+   page-load, when main.js's one-time querySelectorAll('.reveal') ran). */
+.slot{
+  border:1px solid var(--text);background:transparent;color:var(--text);
+  padding:0.55rem 1rem;font-family:var(--sans);font-weight:300;
+  font-size:0.78rem;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer;
+  transition:background .3s,color .3s,border-color .3s;
+}
+.slot:hover:not(:disabled){background:var(--text);color:var(--bg);}
+.slot[aria-pressed="true"]{background:var(--accent);color:var(--bg);border-color:var(--accent);}
+.slot:disabled{opacity:0.35;cursor:not-allowed;text-decoration:line-through;}
+
+.hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden;}
+
+.booking-form .ghost-btn.light{border:1px solid var(--accent);background:transparent;cursor:pointer;font-family:var(--sans);}
+.booking-form .ghost-btn.light:disabled{opacity:0.5;cursor:not-allowed;}
+
+.booking-status{min-height:1.4rem;margin-top:1rem;font-size:0.9rem;color:var(--text-muted);text-align:center;}
+.booking-status.error{color:var(--danger);}
+
+.booking-success{max-width:620px;margin:2.5rem auto 0;text-align:center;}
+.booking-success h3{font-family:var(--serif);font-weight:400;font-size:1.6rem;margin-bottom:1rem;}
+.booking-ref{margin-bottom:0.6rem;}
+.booking-ref strong{
+  font-family:var(--serif);font-size:1.6rem;letter-spacing:0.2em;color:var(--accent);
+}
+.booking-recap{color:var(--text-muted);margin-bottom:0.6rem;}
+
 /* ---------- Footer ---------- */
 .site-footer{
   padding:5rem 3rem 2rem;
@@ -312,6 +395,7 @@ html:not(.js) .hero-content{opacity:1;transform:none;}
   .gallery{grid-template-columns:1fr;grid-template-rows:repeat(3,220px);height:auto;}
   .gallery-item.large{grid-row:auto;}
   .site-footer{grid-template-columns:1fr 1fr;}
+  .booking-grid{grid-template-columns:1fr;}
 }
 
 @media (max-width:480px){
@@ -320,4 +404,5 @@ html:not(.js) .hero-content{opacity:1;transform:none;}
   .site-footer{padding-left:1.5rem;padding-right:1.5rem;grid-template-columns:1fr;gap:1.6rem;}
   .menu-list li span{white-space:normal;}
   .menu-list li em{display:none;}
+  .slot{padding:0.5rem 0.8rem;font-size:0.72rem;}
 }

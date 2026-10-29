@@ -5,3 +5,7 @@ Thumbs.db
 .env
 .env.*
 *.local
+
+# Node / Vercel
+node_modules/
+.vercel
