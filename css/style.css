@@ -12,6 +12,12 @@
 }
 
 *{box-sizing:border-box;margin:0;padding:0;}
+/* Without this, any element that both carries the `hidden` attribute and a
+   class setting its own `display` (e.g. .ghost-btn{display:inline-block})
+   stays visible -- an author rule beats the browser's default [hidden]
+   style regardless of selector specificity. Found via #signOutBtn, which
+   combines hidden with .ghost-btn. */
+[hidden]{display:none !important;}
 html{scroll-behavior:smooth;}
 html.js{scroll-behavior:auto;} /* Lenis owns smooth scrolling when JS runs; avoids double-smoothing */
 body{
