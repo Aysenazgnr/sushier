@@ -184,12 +184,82 @@
   </div>
 </section>
 
-<!-- Reservation CTA -->
+<!-- Reservation -->
 <section class="reservation" id="reservation">
   <p class="eyebrow center">Join Us</p>
   <h2 class="section-title center">Reserve Your Table</h2>
   <p class="reservation-sub">For parties of 6 or more, please contact us directly.</p>
-  <a href="#contact" class="ghost-btn light">Reserve Now</a>
+
+  <!-- Shown until reservation.js successfully boots, and left as-is if it
+       never does (no JS, CDN blocked, script error) -- the page is then
+       byte-for-byte today's behavior. -->
+  <div class="booking-fallback" id="bookingFallback">
+    <a href="#contact" class="ghost-btn light">Reserve Now</a>
+  </div>
+
+  <form class="booking-form" id="bookingForm" novalidate hidden>
+    <div class="booking-grid">
+      <div class="field">
+        <label for="bkDate">Date</label>
+        <input type="date" id="bkDate" name="date" required autocomplete="off">
+      </div>
+      <div class="field">
+        <label for="bkParty">Guests</label>
+        <select id="bkParty" name="partySize" required>
+          <option value="1">1 guest</option>
+          <option value="2" selected>2 guests</option>
+          <option value="3">3 guests</option>
+          <option value="4">4 guests</option>
+          <option value="5">5 guests</option>
+          <option value="6">6 guests</option>
+        </select>
+      </div>
+    </div>
+
+    <fieldset class="slots-field" id="bkSlotsField">
+      <legend>Time</legend>
+      <div class="slots" id="bkSlots">
+        <p class="slots-message">Choose a date to see available times.</p>
+      </div>
+      <input type="hidden" id="bkSlot" name="slotMinute" value="">
+    </fieldset>
+
+    <div class="booking-grid">
+      <div class="field">
+        <label for="bkName">Name</label>
+        <input type="text" id="bkName" name="name" required maxlength="80" autocomplete="name">
+      </div>
+      <div class="field">
+        <label for="bkPhone">Phone</label>
+        <input type="tel" id="bkPhone" name="phone" required maxlength="24" autocomplete="tel">
+      </div>
+    </div>
+    <div class="field">
+      <label for="bkEmail">Email <span class="optional">(optional)</span></label>
+      <input type="email" id="bkEmail" name="email" maxlength="120" autocomplete="email">
+    </div>
+    <div class="field">
+      <label for="bkNotes">Notes <span class="optional">(optional)</span></label>
+      <textarea id="bkNotes" name="notes" rows="3" maxlength="500"></textarea>
+    </div>
+
+    <!-- Honeypot: off-screen, not display:none (some bots skip hidden fields) -->
+    <div class="hp" aria-hidden="true">
+      <label for="bkCompany">Company</label>
+      <input type="text" id="bkCompany" name="company" tabindex="-1" autocomplete="off">
+    </div>
+
+    <button type="submit" class="ghost-btn light" id="bkSubmit">Request Table</button>
+  </form>
+
+  <p class="booking-status" id="bkStatus" role="status" aria-live="polite"></p>
+
+  <div class="booking-success" id="bkSuccess" hidden>
+    <h3 id="bkSuccessTitle" tabindex="-1">Your table is reserved.</h3>
+    <p class="booking-ref">Reference <strong id="bkRef"></strong></p>
+    <p class="booking-recap" id="bkRecap"></p>
+    <p class="reservation-sub">Please keep this reference. To change or cancel, call us.</p>
+  </div>
 </section>
 
 </main>
@@ -227,6 +297,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" integrity="sha384-Z3REaz79l2IaAZqJsSABtTbhjgOUYyV3p90XNnAPCSHg3EMTz1fouunq9WZRtj3d" crossorigin="anonymous" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js" integrity="sha384-B2WBjDzEjJpYvhmi2UyEn7rektqkf5suS6sNoyyrf0EBAwBHdkiXxIlU0V5Ru2ed" crossorigin="anonymous" defer></script>
 <script src="js/main.js" defer></script>
+<script src="js/reservation.js" defer></script>
 <script src="js/hero-scrub.js" defer></script>
 </body>
 </html>

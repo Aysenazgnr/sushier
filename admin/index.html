@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>Sushier — Reservations</title>
+<link rel="icon" type="image/x-icon" href="../favicon.ico">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;1,9..144,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/style.css">
+<link rel="stylesheet" href="../css/admin.css">
+</head>
+<body class="admin-page">
+
+<header class="admin-header">
+  <span class="admin-logo">SUSHIER <span class="admin-logo-sub">Reservations</span></span>
+  <button type="button" class="ghost-btn" id="signOutBtn" hidden>Sign Out</button>
+</header>
+
+<main class="admin-main">
+
+  <!-- Login view -->
+  <section class="admin-login" id="loginView">
+    <h1>Staff Sign In</h1>
+    <form id="loginForm" novalidate>
+      <div class="field">
+        <label for="loginEmail">Email</label>
+        <input type="email" id="loginEmail" name="email" required autocomplete="username">
+      </div>
+      <div class="field">
+        <label for="loginPassword">Password</label>
+        <input type="password" id="loginPassword" name="password" required autocomplete="current-password">
+      </div>
+      <button type="submit" class="ghost-btn light" id="loginSubmit">Sign In</button>
+      <p class="admin-status" id="loginStatus" role="status" aria-live="polite"></p>
+    </form>
+  </section>
+
+  <!-- Dashboard view -->
+  <section class="admin-dashboard" id="dashboardView" hidden>
+
+    <div class="admin-panel">
+      <h2>Reservations</h2>
+      <div class="admin-filters">
+        <div class="field">
+          <label for="filterDate">Date</label>
+          <input type="date" id="filterDate" autocomplete="off">
+        </div>
+        <div class="field">
+          <label for="filterStatus">Status</label>
+          <select id="filterStatus">
+            <option value="">All</option>
+            <option value="booked">Booked</option>
+            <option value="seated">Seated</option>
+            <option value="no_show">No-show</option>
+            <option value="cancelled">Cancelled</option>
+          </select>
+        </div>
+        <div class="admin-quick-filters">
+          <button type="button" class="admin-quick-btn" data-range="today">Today</button>
+          <button type="button" class="admin-quick-btn" data-range="week">This Week</button>
+          <button type="button" class="admin-quick-btn" data-range="upcoming">Upcoming</button>
+          <button type="button" class="admin-quick-btn" data-range="past">Past</button>
+        </div>
+      </div>
+      <p class="admin-status" id="listStatus" role="status" aria-live="polite"></p>
+      <p class="admin-summary" id="listSummary"></p>
+      <div class="admin-table-wrap">
+        <table class="admin-table" id="reservationsTable">
+          <thead>
+            <tr>
+              <th>Date</th><th>Time</th><th>Party</th><th>Name</th><th>Phone</th>
+              <th>Email</th><th>Notes</th><th>Reference</th><th>Status</th><th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="reservationsBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="admin-panel">
+      <h2>Closed Dates</h2>
+      <form id="closeDateForm" class="admin-close-form" novalidate>
+        <div class="field">
+          <label for="closeDate">Date</label>
+          <input type="date" id="closeDate" required autocomplete="off">
+        </div>
+        <div class="field">
+          <label for="closeReason">Reason <span class="optional">(optional)</span></label>
+          <input type="text" id="closeReason" maxlength="120" autocomplete="off">
+        </div>
+        <button type="submit" class="ghost-btn">Close This Date</button>
+      </form>
+      <p class="admin-status" id="closeDateStatus" role="status" aria-live="polite"></p>
+      <ul class="admin-closed-list" id="closedDatesList"></ul>
+    </div>
+
+  </section>
+
+</main>
+
+<script src="../js/vendor/supabase.min.js" defer></script>
+<script src="../js/admin.js" defer></script>
+</body>
+</html>
