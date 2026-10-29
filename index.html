@@ -6,7 +6,6 @@
 <title>Sushier — Fine Japanese Dining</title>
 <meta name="description" content="Sushier — an art form, served. Premium sushi and Japanese craft dining.">
 <script>document.documentElement.classList.add('js');if(window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches){document.documentElement.classList.add('reduced-motion');}</script>
-<link rel="preload" as="image" href="images/interior-night.webp" fetchpriority="high">
 
 <!-- Favicons -->
 <link rel="icon" type="image/x-icon" href="favicon.ico">
@@ -65,16 +64,19 @@
 <main>
 
 <!-- Hero -->
-<section class="hero" id="top">
-  <div class="hero-bg" style="background-image:url('images/interior-night.webp')"></div>
-  <div class="hero-overlay"></div>
-  <div class="hero-content reveal">
-    <p class="eyebrow">Fine Japanese Dining</p>
-    <h1>An Art Form,<br>Served.</h1>
-    <p class="hero-sub">Where precision, fire and the sea meet on a single plate.</p>
-    <a href="#menu" class="ghost-btn">View Menu</a>
+<section class="hero scrub-hero" id="top">
+  <div class="scrub-sticky">
+    <video class="hero-video" muted playsinline preload="auto" aria-hidden="true"></video>
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <p class="eyebrow">Fine Japanese Dining</p>
+      <h1>An Art Form,<br>Served.</h1>
+      <p class="hero-sub">Where precision, fire and the sea meet on a single plate.</p>
+      <a href="#menu" class="ghost-btn">View Menu</a>
+    </div>
+    <div class="scroll-cue"><span></span></div>
+    <div class="scrub-loading" aria-hidden="true"></div>
   </div>
-  <div class="scroll-cue"><span></span></div>
 </section>
 
 <!-- Philosophy / Story -->
@@ -223,6 +225,8 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" integrity="sha384-g4NTh/Iv5PPU4xPyhEWqPcwtNXOvdaDI8LLnyYfyNZOjKJeYQyjzQ9X5275eBjpt" crossorigin="anonymous" defer></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" integrity="sha384-Z3REaz79l2IaAZqJsSABtTbhjgOUYyV3p90XNnAPCSHg3EMTz1fouunq9WZRtj3d" crossorigin="anonymous" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js" integrity="sha384-B2WBjDzEjJpYvhmi2UyEn7rektqkf5suS6sNoyyrf0EBAwBHdkiXxIlU0V5Ru2ed" crossorigin="anonymous" defer></script>
 <script src="js/main.js" defer></script>
+<script src="js/hero-scrub.js" defer></script>
 </body>
 </html>

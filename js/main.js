@@ -46,21 +46,15 @@ if (typeof gsap === 'undefined' || reducedMotion) {
   });
 } else {
   initAnimations();
+  initSmoothScroll();
 }
 
 function initAnimations() {
-// GSAP scroll reveal
+// GSAP scroll reveal (hero copy is handled separately by hero-scrub.js,
+// in step with the scrub rig rather than a fixed delay)
 gsap.registerPlugin(ScrollTrigger);
 
-gsap.to('.hero-content', {
-  opacity: 1, y: 0, duration: 1.2, delay: 0.3, ease: 'power2.out'
-});
-
-gsap.to('.hero-bg', {
-  scale: 1, duration: 2.5, ease: 'power2.out'
-});
-
-document.querySelectorAll('.reveal:not(.hero-content)').forEach(el => {
+document.querySelectorAll('.reveal').forEach(el => {
   gsap.to(el, {
     opacity: 1,
     y: 0,
@@ -72,16 +66,30 @@ document.querySelectorAll('.reveal:not(.hero-content)').forEach(el => {
     }
   });
 });
+}
 
-// Subtle parallax on hero background
-gsap.to('.hero-bg', {
-  yPercent: 15,
-  ease: 'none',
-  scrollTrigger: {
-    trigger: '.hero',
-    start: 'top top',
-    end: 'bottom top',
-    scrub: true
-  }
-});
+// Single shared clock: Lenis is driven off the GSAP ticker instead of its own
+// rAF loop, so every scroll-linked animation (ScrollTrigger, hero-scrub.js)
+// reads a consistent scroll position with no double-rAF drift.
+function initSmoothScroll() {
+  if (typeof Lenis === 'undefined') return;
+
+  const lenis = new Lenis({ lerp: 0.075, smoothWheel: true });
+  lenis.on('scroll', ScrollTrigger.update);
+  gsap.ticker.add((time) => { lenis.raf(time * 1000); });
+  gsap.ticker.lagSmoothing(0);
+  window.__lenis = lenis;
+
+  // Route in-page nav anchors through Lenis so header/mobile-nav links keep
+  // the same smooth feel as wheel scrolling.
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', (e) => {
+      const id = a.getAttribute('href');
+      if (!id || id === '#') return;
+      const target = document.querySelector(id);
+      if (!target) return;
+      e.preventDefault();
+      lenis.scrollTo(target);
+    });
+  });
 }
