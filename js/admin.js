@@ -225,7 +225,7 @@ function buildRowActions(row) {
     actionButton('Cancel', () => {
       const label = row.guest_name + ' at ' + minutesToTime(row.slot_minute) + ' on ' + row.service_date;
       if (window.confirm('Cancel the reservation for ' + label + '?')) {
-        updateReservationStatus(row.id, 'cancelled', { cancelled_at: new Date().toISOString() });
+        updateReservationStatus(row.id, 'cancelled');
       }
     }, true);
   } else if (row.status === 'cancelled') {
@@ -233,24 +233,46 @@ function buildRowActions(row) {
     // is intentional, not a bug (see plan: the slot may have refilled,
     // and that failure is surfaced by the update itself only via RLS,
     // never silently blocked here).
-    actionButton('Reopen', () => updateReservationStatus(row.id, 'booked', { cancelled_at: null }));
+    actionButton('Reopen', () => updateReservationStatus(row.id, 'booked'));
   } else {
-    actionButton('Reopen', () => updateReservationStatus(row.id, 'booked', { cancelled_at: null }));
+    actionButton('Reopen', () => updateReservationStatus(row.id, 'booked'));
   }
 
   return wrap;
 }
 
-function updateReservationStatus(id, status, extra) {
-  const patch = Object.assign({ status: status }, extra || {});
+// Routed through /api/reservation-status instead of writing to Supabase
+// directly: the update still runs under this staff member's own session
+// (their access token goes in Authorization, so RLS/is_staff() is exactly
+// as before -- this route has no elevated access of its own), but routing
+// through the server is what lets a cancellation trigger a Telegram
+// notification, which no client-side code could do without shipping the
+// bot token to the browser. cancelled_at is set server-side now, not here.
+function updateReservationStatus(id, status) {
   setStatus(listStatus, 'Updating…');
-  client.from('reservations').update(patch).eq('id', id).then(({ error }) => {
-    if (error) {
-      setStatus(listStatus, 'Could not update that reservation.', 'error');
+  client.auth.getSession().then(({ data: sessionData }) => {
+    const token = sessionData.session && sessionData.session.access_token;
+    if (!token) {
+      setStatus(listStatus, 'Your session expired. Please sign in again.', 'error');
       return;
     }
-    setStatus(listStatus, '');
-    loadReservations();
+    fetch('/api/reservation-status', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + token },
+      body: JSON.stringify({ id, status })
+    })
+      .then((response) => response.json().then((body) => ({ httpStatus: response.status, body })))
+      .then(({ httpStatus, body }) => {
+        if (httpStatus !== 200 || !body.ok) {
+          setStatus(listStatus, 'Could not update that reservation.', 'error');
+          return;
+        }
+        setStatus(listStatus, '');
+        loadReservations();
+      })
+      .catch(() => {
+        setStatus(listStatus, 'Could not update that reservation.', 'error');
+      });
   });
 }
 

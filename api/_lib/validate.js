@@ -6,6 +6,8 @@
 const DATE_RE = /^\d{4}-\d{2}-\d{2}$/;
 const PHONE_RE = /^[+0-9 ()\-.]{7,24}$/;
 const EMAIL_RE = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
+const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+const RESERVATION_STATUSES = ['booked', 'seated', 'no_show', 'cancelled'];
 // eslint-disable-next-line no-control-regex
 const CONTROL_CHARS_RE = /[\u0000-\u001F]/g;
 
@@ -102,4 +104,22 @@ function validateReservationBody(body) {
   };
 }
 
-module.exports = { validateDateParam, validateReservationBody };
+// Validates a POST /api/reservation-status body: { id, status }. Returns
+// { ok, data: { id, status } } or { ok: false, code }.
+function validateStatusUpdateBody(body) {
+  if (!body || typeof body !== 'object') {
+    return { ok: false, code: 'invalid_body' };
+  }
+
+  if (typeof body.id !== 'string' || !UUID_RE.test(body.id)) {
+    return { ok: false, code: 'invalid_id' };
+  }
+
+  if (typeof body.status !== 'string' || RESERVATION_STATUSES.indexOf(body.status) === -1) {
+    return { ok: false, code: 'invalid_status' };
+  }
+
+  return { ok: true, data: { id: body.id, status: body.status } };
+}
+
+module.exports = { validateDateParam, validateReservationBody, validateStatusUpdateBody };

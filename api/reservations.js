@@ -6,6 +6,7 @@
 const { supabase } = require('./_lib/supabase');
 const { validateReservationBody } = require('./_lib/validate');
 const { getClientIp, hashIp } = require('./_lib/ip');
+const { notifyNewReservation } = require('./_lib/telegram');
 
 const MAX_BODY_BYTES = 8 * 1024;
 
@@ -93,6 +94,23 @@ module.exports = async (req, res) => {
   const hours = Math.floor(data.slotMinute / 60);
   const minutes = data.slotMinute % 60;
   const time = String(hours % 24).padStart(2, '0') + ':' + String(minutes).padStart(2, '0');
+
+  // Reached only once a row is genuinely in the database (both the error
+  // and !data.ok branches above have already returned). Awaited so the
+  // work isn't abandoned if the function instance freezes right after the
+  // response is sent, but bounded to SEND_TIMEOUT_MS inside the helper so
+  // a Telegram outage can add at most ~2.5s to the guest's wait, never
+  // turn a successful booking into a failure.
+  await notifyNewReservation({
+    date: data.date,
+    time,
+    partySize,
+    name,
+    phone,
+    email,
+    notes,
+    reference: data.reference
+  });
 
   res.status(201).json({
     ok: true,
