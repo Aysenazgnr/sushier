@@ -291,6 +291,15 @@ html:not(.js) .hero-content{opacity:1;transform:none;}
   transition:border-color .3s;
 }
 .booking-form textarea{resize:vertical;min-height:4.5rem;}
+/* The closed <select> box sits on the dark section, so transparent reads
+   fine there -- but its native options POPUP is its own OS-drawn layer
+   with nothing behind it, so "transparent" resolves to the system's
+   default (white). Paired with our pale --text color that made every
+   option unreadable until a hover highlight revealed it. Give the
+   control and its options a real, opaque background so the popup matches
+   the page instead of depending on hover. */
+.booking-form select{background-color:var(--bg-alt);}
+.booking-form select option{background-color:var(--bg-alt);color:var(--text);}
 .booking-form input::placeholder,.booking-form textarea::placeholder{color:var(--text-muted);}
 .booking-form input:focus,.booking-form select:focus,.booking-form textarea:focus{border-color:var(--accent);}
 .booking-form input:disabled,.booking-form select:disabled,.booking-form textarea:disabled{opacity:0.5;cursor:not-allowed;}

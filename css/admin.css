@@ -47,6 +47,11 @@
   width:100%;background:transparent;border:1px solid var(--border);
   padding:0.6rem 0.8rem;font-family:var(--sans);font-weight:300;font-size:0.9rem;color:var(--text);
 }
+/* Same fix as the booking form's select: a native options popup is its
+   own OS-drawn layer, so "transparent" resolves to white there and made
+   the pale --text color unreadable until hovered. */
+.admin-filters select{background-color:var(--bg-alt);}
+.admin-filters select option{background-color:var(--bg-alt);color:var(--text);}
 .admin-quick-filters{display:flex;gap:0.5rem;flex-wrap:wrap;}
 .admin-quick-btn{
   border:1px solid var(--border);background:transparent;color:var(--text-muted);
