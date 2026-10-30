@@ -21,18 +21,31 @@ function escapeHtml(value) {
 }
 
 async function sendMessage(text) {
-  if (!BOT_TOKEN || !CHAT_ID) return;
+  if (!BOT_TOKEN || !CHAT_ID) {
+    console.error('[telegram] not configured: token or chat id missing');
+    return;
+  }
 
   try {
-    await fetch('https://api.telegram.org/bot' + BOT_TOKEN + '/sendMessage', {
+    const res = await fetch('https://api.telegram.org/bot' + BOT_TOKEN + '/sendMessage', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ chat_id: CHAT_ID, text, parse_mode: 'HTML' }),
       signal: AbortSignal.timeout(SEND_TIMEOUT_MS)
     });
+    if (!res.ok) {
+      // Logged (status + Telegram's own error description only, never the
+      // token or chat id) so a silent delivery failure in production is
+      // actually observable instead of a guest/staff action just not
+      // notifying with no trace anywhere.
+      const body = await res.text().catch(() => '');
+      console.error('[telegram] API rejected the message:', res.status, body);
+    }
   } catch (err) {
-    // Swallowed on purpose -- see file header. Nothing to retry; the next
-    // reservation/cancellation will try again on its own.
+    // Network error, timeout, etc. -- still swallowed (see file header:
+    // the caller's real work must never fail over this), but logged so
+    // outages are visible in Vercel's runtime logs.
+    console.error('[telegram] send failed:', err && err.name, err && err.message);
   }
 }
 
