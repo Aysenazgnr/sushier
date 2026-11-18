@@ -10,3 +10,8 @@ Thumbs.db
 node_modules/
 .vercel
 .env*
+
+# ...but the documented-with-placeholders template file itself is meant
+# to be committed, so every real env var name has one place it's written
+# down (see docs/mail-otomasyonu.md).
+!.env.example

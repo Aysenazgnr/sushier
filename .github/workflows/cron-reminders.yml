@@ -1,0 +1,19 @@
+# Triggers api/cron-reminders.js once an hour. This lives in GitHub
+# Actions rather than Vercel's own cron feature because Vercel's Hobby
+# plan only runs crons once a day -- not often enough for a "2-4 hours
+# before the reservation" reminder window. See docs/mail-otomasyonu.md.
+name: Rezervasyon hatırlatmaları
+
+on:
+  schedule:
+    - cron: '0 * * * *'
+  workflow_dispatch: {}
+
+jobs:
+  trigger:
+    runs-on: ubuntu-latest
+    steps:
+      - name: /api/cron-reminders çağır
+        run: |
+          curl -sS -f -X POST "${{ vars.SITE_URL }}/api/cron-reminders" \
+            -H "Authorization: Bearer ${{ secrets.CRON_SECRET }}"

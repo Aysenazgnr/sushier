@@ -14,17 +14,24 @@ const MODEL = process.env.ANTHROPIC_MODEL || 'claude-haiku-5-5';
 const API_URL = 'https://api.anthropic.com/v1/messages';
 const ANTHROPIC_VERSION = '2023-06-01';
 const REQUEST_TIMEOUT_MS = 20000;
-const MAX_TOKENS = 400;
+// Chat's own budget (short conversational replies). api/_lib/digest.js
+// passes a larger maxTokens for the daily inbox digest, which needs room
+// for several ranked, summarized items.
+const DEFAULT_MAX_TOKENS = 400;
 
 function isConfigured() {
   return API_KEY !== '';
 }
 
-// params: { system, messages, tools }. Returns { ok:true, message } with
-// the raw Anthropic response body on success, or { ok:false, code } on
-// any failure -- network error, timeout, non-2xx status. Never throws:
-// api/chat.js always gets a result it can turn into an HTTP response.
-async function createMessage({ system, messages, tools }) {
+// params: { system, messages, tools, maxTokens }. maxTokens defaults to
+// DEFAULT_MAX_TOKENS (chat's own budget) when omitted, so api/chat.js's
+// existing calls are unaffected -- api/_lib/digest.js is the only caller
+// that passes a larger value, for the daily inbox digest. Returns
+// { ok:true, message } with the raw Anthropic response body on success,
+// or { ok:false, code } on any failure -- network error, timeout,
+// non-2xx status. Never throws: callers always get a result they can
+// turn into an HTTP response.
+async function createMessage({ system, messages, tools, maxTokens }) {
   if (!isConfigured()) {
     return { ok: false, code: 'chat_unavailable' };
   }
@@ -39,7 +46,7 @@ async function createMessage({ system, messages, tools }) {
       },
       body: JSON.stringify({
         model: MODEL,
-        max_tokens: MAX_TOKENS,
+        max_tokens: maxTokens || DEFAULT_MAX_TOKENS,
         system,
         messages,
         tools

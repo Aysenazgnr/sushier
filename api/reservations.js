@@ -7,6 +7,7 @@ const { supabase } = require('./_lib/supabase');
 const { validateReservationBody } = require('./_lib/validate');
 const { getClientIp, hashIp } = require('./_lib/ip');
 const { notifyNewReservation } = require('./_lib/telegram');
+const { sendNewReservationAlert } = require('./_lib/mail');
 
 const MAX_BODY_BYTES = 8 * 1024;
 
@@ -98,10 +99,12 @@ module.exports = async (req, res) => {
   // Reached only once a row is genuinely in the database (both the error
   // and !data.ok branches above have already returned). Awaited so the
   // work isn't abandoned if the function instance freezes right after the
-  // response is sent, but bounded to SEND_TIMEOUT_MS inside the helper so
-  // a Telegram outage can add at most ~2.5s to the guest's wait, never
-  // turn a successful booking into a failure.
-  await notifyNewReservation({
+  // response is sent, but bounded to SEND_TIMEOUT_MS inside each helper so
+  // an outage can add at most ~3s to the guest's wait, never turn a
+  // successful booking into a failure. Telegram and the restaurant's
+  // alert email don't depend on each other, so they run concurrently --
+  // in series this would add up to ~6s instead of ~3s worst case.
+  const booking = {
     date: data.date,
     time,
     partySize,
@@ -110,7 +113,11 @@ module.exports = async (req, res) => {
     email,
     notes,
     reference: data.reference
-  });
+  };
+  await Promise.all([
+    notifyNewReservation(booking),
+    sendNewReservationAlert(booking)
+  ]);
 
   res.status(201).json({
     ok: true,

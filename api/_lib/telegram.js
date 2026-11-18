@@ -1,24 +1,21 @@
-// Telegram notifications for new reservations and staff cancellations.
+// Telegram notifications for new reservations, staff cancellations, and
+// the daily inbox digest.
 // Optional by design -- unlike api/_lib/supabase.js, a missing token here
 // must never throw at import time, because that would take down the whole
 // booking/cancellation flow over a notification feature. Every public
 // function swallows its own failures (network error, bad token, Telegram
-// outage) so the caller's real work (the booking, the cancellation) always
-// completes regardless of whether the message gets through.
+// outage) so the caller's real work (the booking, the cancellation, the
+// digest) always completes regardless of whether the message gets through.
+const { escapeHtml } = require('./html');
+
 const BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN || '';
 const CHAT_ID = process.env.TELEGRAM_CHAT_ID || '';
 const SEND_TIMEOUT_MS = 3000;
 
-// Guest-supplied text (name, notes) must never be interpolated into the
-// HTML-parsed message unescaped -- same defense as js/admin.js rendering
-// guest fields via textContent, just applied to Telegram's parse_mode:
-// 'HTML' instead of the DOM.
-function escapeHtml(value) {
-  return String(value)
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;');
-}
+// Telegram's real limit is 4096 characters; this leaves headroom for
+// HTML entities (escapeHtml can expand a character to &lt; etc.) pushing
+// a message that measured just under the limit back over it.
+const MAX_MESSAGE_CHARS = 3500;
 
 async function sendMessage(text) {
   if (!BOT_TOKEN || !CHAT_ID) {
@@ -47,6 +44,25 @@ async function sendMessage(text) {
     // outages are visible in Vercel's runtime logs.
     console.error('[telegram] send failed:', err && err.name, err && err.message);
   }
+}
+
+// Splits text that may be longer than Telegram's message limit into
+// chunks that break on line boundaries where possible, so one logical
+// digest entry isn't cut in half mid-sentence. Pure function, easy to
+// unit-test independent of the network call below.
+function chunkMessage(text) {
+  if (text.length <= MAX_MESSAGE_CHARS) return [text];
+
+  const chunks = [];
+  let rest = text;
+  while (rest.length > MAX_MESSAGE_CHARS) {
+    let cut = rest.lastIndexOf('\n', MAX_MESSAGE_CHARS);
+    if (cut <= 0) cut = MAX_MESSAGE_CHARS; // no newline to break on -- hard cut
+    chunks.push(rest.slice(0, cut));
+    rest = rest.slice(cut).replace(/^\n+/, '');
+  }
+  if (rest.length > 0) chunks.push(rest);
+  return chunks;
 }
 
 function formatBookingLines(booking) {
@@ -79,4 +95,16 @@ async function notifyCancellation(booking, staffEmail) {
   await sendMessage(lines.join('\n'));
 }
 
-module.exports = { notifyNewReservation, notifyCancellation };
+// Called once a day from api/cron-digest.js with the already-rendered
+// digest text (see api/_lib/digest.js -- this function never builds the
+// text itself, it only has to get a long message delivered). Chunked and
+// sent in order; one chunk failing (logged inside sendMessage) does not
+// stop the rest from being tried, since each is an independent request.
+async function notifyDigest(text) {
+  const chunks = chunkMessage(text);
+  for (const chunk of chunks) {
+    await sendMessage(chunk);
+  }
+}
+
+module.exports = { notifyNewReservation, notifyCancellation, notifyDigest };

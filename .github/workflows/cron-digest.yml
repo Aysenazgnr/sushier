@@ -1,0 +1,18 @@
+# Triggers api/cron-digest.js once a day at 06:00 UTC = 09:00
+# Europe/Istanbul (Turkey stays on UTC+3 year-round, no DST, so this
+# never needs seasonal adjustment). See docs/mail-otomasyonu.md.
+name: Günlük mail özeti
+
+on:
+  schedule:
+    - cron: '0 6 * * *'
+  workflow_dispatch: {}
+
+jobs:
+  trigger:
+    runs-on: ubuntu-latest
+    steps:
+      - name: /api/cron-digest çağır
+        run: |
+          curl -sS -f -X POST "${{ vars.SITE_URL }}/api/cron-digest" \
+            -H "Authorization: Bearer ${{ secrets.CRON_SECRET }}"

@@ -4,6 +4,12 @@
     "api/chat.js": {
       "maxDuration": 25
     },
+    "api/cron-digest.js": {
+      "maxDuration": 60
+    },
+    "api/cron-reminders.js": {
+      "maxDuration": 30
+    },
     "api/*.js": {
       "maxDuration": 10
     }
