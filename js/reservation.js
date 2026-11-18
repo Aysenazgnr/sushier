@@ -122,6 +122,10 @@ if (bookingForm) {
       pill.className = 'slot';
       pill.textContent = slot.time;
       pill.setAttribute('aria-pressed', 'false');
+      // Read by the chat widget's prefill() below to find and click the
+      // slot the visitor already agreed to in the chat -- not used by
+      // anything in this file itself.
+      pill.dataset.slotMinute = String(slot.slotMinute);
       if (!slot.bookable) {
         pill.disabled = true;
         pill.setAttribute('aria-label', slot.time + ', fully booked');
@@ -146,6 +150,9 @@ if (bookingForm) {
     slotsEl.replaceChildren(...pills);
   }
 
+  // Returns the fetch chain (used by the chat widget's prefill() below to
+  // wait for slots to render before it tries to click one -- see
+  // window.__sushierBooking at the end of this file).
   function loadAvailability(dateStr) {
     if (availabilityController) availabilityController.abort();
     availabilityController = new AbortController();
@@ -154,7 +161,7 @@ if (bookingForm) {
     renderSlotsMessage('Checking availability…');
     setStatus('');
 
-    fetch('/api/availability?date=' + encodeURIComponent(dateStr), { signal: availabilityController.signal })
+    return fetch('/api/availability?date=' + encodeURIComponent(dateStr), { signal: availabilityController.signal })
       .then((response) => response.json().then((body) => ({ status: response.status, body })))
       .then(({ status, body }) => {
         if (status !== 200 || !body.ok) {
@@ -270,4 +277,41 @@ if (bookingForm) {
   // happen is worse than a broken animation, so every failure path above
   // ends by writing into the #bkStatus live region instead of staying
   // silent.
+
+  // Called by js/chat.js after the chatbot's prefill_reservation tool has
+  // already validated date/party/slot against live availability (see
+  // api/chat.js) -- this function trusts that and just drives the same
+  // UI a guest would have driven by hand, through the same renderSlots/
+  // loadAvailability code path, so there is exactly one place that turns
+  // availability data into slot pills.
+  function prefill(date, partySize, slotMinute) {
+    dateInput.value = date;
+    if (partySelect.querySelector('option[value="' + partySize + '"]')) {
+      partySelect.value = String(partySize);
+    }
+
+    return loadAvailability(date).then(() => {
+      if (slotMinute === null || slotMinute === undefined) {
+        scrollToEl(bookingForm);
+        nameInput.focus({ preventScroll: true });
+        return;
+      }
+
+      const pill = slotsEl.querySelector('[data-slot-minute="' + slotMinute + '"]');
+      if (pill && !pill.disabled) {
+        pill.click();
+        scrollToEl(bookingForm);
+        nameInput.focus({ preventScroll: true });
+      } else {
+        // The slot the visitor agreed to in chat filled up in the few
+        // seconds since api/chat.js checked it -- the same race
+        // handleSubmit already re-checks for. Say so instead of leaving
+        // the form on an unselected time.
+        setStatus('That time just filled up. Please choose another.', 'error');
+        scrollToEl(slotsField);
+      }
+    });
+  }
+
+  window.__sushierBooking = { prefill };
 }
