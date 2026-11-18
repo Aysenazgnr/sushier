@@ -286,6 +286,34 @@
   <div class="footer-bottom">© 2026 Sushier. All rights reserved.</div>
 </footer>
 
+<!-- Chat widget: hidden until js/chat.js runs, same convention as
+     #bookingForm above (hidden by default, unhidden by its own script).
+     If the chat API has no key configured yet, the button still shows --
+     the first message gets a clear "chat is unavailable" reply instead
+     of the feature just silently not existing (see js/chat.js). -->
+<div class="chat-widget" id="chatWidget" hidden>
+  <button type="button" class="chat-toggle" id="chatToggle" aria-expanded="false" aria-controls="chatPanel" aria-label="Open chat">
+    <span class="chat-toggle-icon" aria-hidden="true"></span>
+  </button>
+
+  <div class="chat-panel" id="chatPanel" hidden>
+    <div class="chat-panel-header">
+      <p class="chat-panel-title" id="chatPanelTitle">Sushier</p>
+      <button type="button" class="chat-close" id="chatClose" aria-label="Close chat">&times;</button>
+    </div>
+
+    <div class="chat-log" id="chatLog" role="log" aria-live="polite"></div>
+
+    <form class="chat-form" id="chatForm" novalidate>
+      <label class="sr-only" for="chatInput" id="chatInputLabel">Message</label>
+      <textarea id="chatInput" name="message" rows="1" maxlength="500" autocomplete="off"></textarea>
+      <button type="submit" class="chat-send" id="chatSend" aria-label="Send">
+        <span class="chat-send-icon" aria-hidden="true"></span>
+      </button>
+    </form>
+  </div>
+</div>
+
 <div class="footer-map" id="footerMap">
   <button type="button" class="map-load-btn" id="mapLoadBtn">
     Haritayı Göster
@@ -299,5 +327,6 @@
 <script src="js/main.js" defer></script>
 <script src="js/reservation.js" defer></script>
 <script src="js/hero-scrub.js" defer></script>
+<script src="js/chat.js" defer></script>
 </body>
 </html>

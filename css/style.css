@@ -36,6 +36,14 @@ ul{list-style:none;}
    fixes that everywhere, not just in the new form. */
 :focus-visible{outline:2px solid var(--accent);outline-offset:3px;}
 
+/* Visually hidden but still reachable by screen readers -- used by the
+   chat widget's textarea <label>, which needs no visible label since the
+   panel header and placeholder already say what the field is for. */
+.sr-only{
+  position:absolute;width:1px;height:1px;padding:0;margin:-1px;
+  overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;
+}
+
 .eyebrow{
   font-family:var(--sans);
   text-transform:uppercase;
@@ -385,6 +393,101 @@ html:not(.js) .hero-content{opacity:1;transform:none;}
   max-width:420px;text-align:center;
 }
 
+/* ---------- Chat widget ---------- */
+/* z-index 120: above .site-header (100) and .mobile-nav (99), since the
+   widget must stay reachable even with the mobile nav open. */
+.chat-widget{position:fixed;right:1.6rem;bottom:1.6rem;z-index:120;}
+
+.chat-toggle{
+  width:56px;height:56px;border-radius:50%;
+  background:var(--accent);border:none;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 6px 20px rgba(0,0,0,0.35);
+  transition:transform .25s;
+}
+.chat-toggle:hover{transform:scale(1.06);}
+.chat-toggle-icon{
+  width:22px;height:22px;position:relative;
+}
+/* Drawn in CSS (two bars that become a cross when the panel is open)
+   rather than an icon font or inline SVG sprite -- this is the only icon
+   this widget needs, so one more dependency isn't worth it. */
+.chat-toggle-icon::before,.chat-toggle-icon::after{
+  content:'';position:absolute;left:0;top:50%;width:100%;height:2px;
+  background:var(--text);transition:transform .25s;
+}
+.chat-toggle-icon::before{transform:translateY(-6px);}
+.chat-toggle-icon::after{transform:translateY(6px);}
+.chat-toggle[aria-expanded="true"] .chat-toggle-icon::before{transform:translateY(0) rotate(45deg);}
+.chat-toggle[aria-expanded="true"] .chat-toggle-icon::after{transform:translateY(0) rotate(-45deg);}
+
+.chat-panel{
+  position:absolute;right:0;bottom:calc(56px + 1rem);
+  width:340px;max-height:min(520px,70vh);
+  display:flex;flex-direction:column;
+  background:var(--bg-alt);border:1px solid var(--border);border-radius:14px;
+  box-shadow:0 18px 50px rgba(0,0,0,0.45);
+  overflow:hidden;
+}
+.js:not(.reduced-motion) .chat-panel{
+  animation:chatPanelIn .22s ease-out;
+}
+@keyframes chatPanelIn{
+  from{opacity:0;transform:translateY(12px);}
+  to{opacity:1;transform:translateY(0);}
+}
+
+.chat-panel-header{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0.9rem 1.1rem;border-bottom:1px solid var(--border);
+}
+.chat-panel-title{
+  font-family:var(--serif);font-weight:400;font-size:1.05rem;letter-spacing:0.02em;
+}
+.chat-close{
+  background:none;border:none;color:var(--text-muted);cursor:pointer;
+  font-size:1.4rem;line-height:1;padding:0 0.2rem;
+}
+.chat-close:hover{color:var(--text);}
+
+.chat-log{
+  flex:1;overflow-y:auto;padding:1rem 1.1rem;
+  display:flex;flex-direction:column;gap:0.6rem;
+}
+.chat-bubble{
+  font-family:var(--sans);font-size:0.86rem;line-height:1.5;
+  padding:0.55rem 0.85rem;border-radius:12px;max-width:85%;
+  white-space:pre-wrap;word-break:break-word;
+}
+.chat-bubble-bot{
+  background:rgba(243,239,233,0.08);color:var(--text);
+  align-self:flex-start;border-bottom-left-radius:4px;
+}
+.chat-bubble-user{
+  background:var(--accent);color:var(--text);
+  align-self:flex-end;border-bottom-right-radius:4px;
+}
+
+.chat-form{
+  display:flex;align-items:flex-end;gap:0.6rem;
+  padding:0.8rem;border-top:1px solid var(--border);
+}
+.chat-form textarea{
+  flex:1;resize:none;max-height:90px;
+  background:var(--bg);color:var(--text);border:1px solid var(--border);border-radius:10px;
+  font-family:var(--sans);font-size:0.86rem;padding:0.55rem 0.75rem;
+}
+.chat-send{
+  width:38px;height:38px;flex:none;border-radius:50%;border:none;
+  background:var(--accent);cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+}
+.chat-send:disabled{opacity:0.5;cursor:default;}
+.chat-send-icon{
+  width:0;height:0;border-style:solid;
+  border-width:5px 0 5px 8px;border-color:transparent transparent transparent var(--text);
+}
+
 /* ---------- Reveal animation base ---------- */
 /* Only hidden when JS has run AND the user allows motion; otherwise content is visible by default (no-JS / CDN-blocked fallback). */
 .js:not(.reduced-motion) .reveal{opacity:0;transform:translateY(40px);}
@@ -414,4 +517,10 @@ html:not(.js) .hero-content{opacity:1;transform:none;}
   .menu-list li span{white-space:normal;}
   .menu-list li em{display:none;}
   .slot{padding:0.5rem 0.8rem;font-size:0.72rem;}
+
+  .chat-widget{right:1rem;bottom:1rem;}
+  .chat-panel{
+    position:fixed;left:1rem;right:1rem;bottom:calc(56px + 1.6rem);
+    width:auto;max-height:min(460px,65vh);
+  }
 }

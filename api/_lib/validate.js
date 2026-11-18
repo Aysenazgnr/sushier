@@ -122,4 +122,64 @@ function validateStatusUpdateBody(body) {
   return { ok: true, data: { id: body.id, status: body.status } };
 }
 
-module.exports = { validateDateParam, validateReservationBody, validateStatusUpdateBody };
+const CHAT_ROLES = ['user', 'assistant'];
+const CHAT_MAX_MESSAGES = 20;
+const CHAT_MAX_CONTENT_CHARS = 500;
+
+// Validates a POST /api/chat body: { messages: [{role, content}] }. The
+// whole conversation is re-sent by the browser on every turn (the server
+// keeps no chat state -- see api/chat.js), so this both shapes the data
+// and acts as the "hafif koruma" (light abuse guard): a capped turn count
+// and a capped length per turn keep one visitor from running up a large
+// Anthropic bill in a single page load. Returns { ok, data: { messages } }
+// with cleaned content, or { ok: false, code }.
+function validateChatBody(body) {
+  if (!body || typeof body !== 'object' || !Array.isArray(body.messages)) {
+    return { ok: false, code: 'invalid_body' };
+  }
+
+  if (body.messages.length === 0) {
+    return { ok: false, code: 'invalid_body' };
+  }
+
+  if (body.messages.length > CHAT_MAX_MESSAGES) {
+    return { ok: false, code: 'conversation_too_long' };
+  }
+
+  const messages = [];
+  for (const entry of body.messages) {
+    if (!entry || typeof entry !== 'object' || CHAT_ROLES.indexOf(entry.role) === -1) {
+      return { ok: false, code: 'invalid_message' };
+    }
+    if (typeof entry.content !== 'string') {
+      return { ok: false, code: 'invalid_message' };
+    }
+    const content = stripControlChars(entry.content).trim();
+    if (content.length === 0 || content.length > CHAT_MAX_CONTENT_CHARS) {
+      return { ok: false, code: 'invalid_message' };
+    }
+    messages.push({ role: entry.role, content });
+  }
+
+  // Must end on a user turn -- anything else means the client is either
+  // replaying its own last answer or sending a malformed history.
+  if (messages[messages.length - 1].role !== 'user') {
+    return { ok: false, code: 'invalid_message' };
+  }
+
+  // Which fixed-template language to use for the prefill confirmation
+  // (see api/chat.js) -- the same navigator.language-based choice js/chat.js
+  // already makes for its own UI labels, just echoed back on each request
+  // since the server keeps no session. Never affects the model's own
+  // reply language, which always follows whatever the visitor typed.
+  const lang = body.lang === 'tr' ? 'tr' : 'en';
+
+  return { ok: true, data: { messages, lang } };
+}
+
+module.exports = {
+  validateDateParam,
+  validateReservationBody,
+  validateStatusUpdateBody,
+  validateChatBody
+};
